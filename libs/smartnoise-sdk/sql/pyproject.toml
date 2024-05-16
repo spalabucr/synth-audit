@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "smartnoise-sql"
+version = "1.0.3"
+description = "Differentially Private SQL Queries"
+authors = ["SmartNoise Team <smartnoise@opendp.org>"]
+license = "MIT"
+packages = [{include="snsql"}]
+homepage = "https://smartnoise.org"
+repository = "https://github.com/opendp/smartnoise-sdk"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+opendp = "^0.8.0"
+antlr4-python3-runtime = "4.9.3"
+PyYAML = "^6.0.1"
+graphviz = "^0.17"
+sqlalchemy = "^2.0.0"
+pandas = "^2.0.1"
+
+[tool.poetry.dev-dependencies]
+pyright = "^1"
+
+[build-system]
+requires = ["setuptools", "poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+# These are the only files for which, so far, we have checked that pyright passes.
+# To be expanded as more type hints are added.
+include = [
+    "snsql/metadata.py",
+    "snsql/sql/reader/base.py",
+]

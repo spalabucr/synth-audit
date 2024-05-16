@@ -1,0 +1,104 @@
+name: PostgreSQL and SQLite Integration Tests
+on:
+  pull_request:
+    paths:
+      - 'sql/tests/**'
+      - 'sql/snsql/**'
+      - 'sql/pyproject.toml'
+      - '!sql/tests/setup/sqlserver/**'
+      - '!sql/tests/setup/mysql/**'
+      - '!sql/tests/setup/biqquery/**'
+  workflow_dispatch:
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9]
+      max-parallel: 5
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Generate random password
+        shell: bash -l {0}
+        run: |
+          export RANDPASS=pgpass$RANDOM
+          echo "export PGPASSWORD=$RANDPASS" >> pass.sh
+          echo "export POSTGRES_PASSWORD=$RANDPASS" >> pass.sh
+      - name: Install postgres
+        shell: bash -l {0}
+        run: |
+          sudo apt-get update
+          sudo apt-get --yes install postgresql-client postgresql
+          sudo service postgresql start
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          auto-update-conda: true
+          auto-activate-base: true
+          python-version: ${{ matrix.python-version }}
+      - name: Configure postgres password
+        shell: bash -l {0}
+        run: |
+          source pass.sh
+          sudo -u postgres psql -U postgres -d postgres -c "alter user postgres with password '$PGPASSWORD';"
+      - name: Upgrade pip
+        shell: bash -l {0}
+        run: |
+          conda install pip
+          conda update pip
+      - name: Setup SDK
+        shell: bash -l {0}
+        run: |
+          cd sql
+          pip install --no-cache-dir -r tests/requirements.txt
+          pip install --no-cache-dir -r tests/setup/postgres/requirements.txt
+          pip install --no-cache-dir  .
+      - name: Download test datasets
+        shell: bash -l {0}
+        run: |
+          cd sql
+          ls -l ../datasets
+      - name: Install PUMS
+        shell: bash -l {0}
+        run: |
+          source pass.sh
+          cd sql
+          cd tests/setup/postgres/PUMS
+          source install.sh
+        env:
+          POSTGRES_HOST: localhost
+      - name: Verify database counts
+        shell: bash -l {0}
+        run: |
+          source pass.sh
+          psql -U postgres -h $POSTGRES_HOST -d pums -c "select count(*) FROM pums.pums"
+          psql -U postgres -h $POSTGRES_HOST -d pums -c "select count(*) FROM pums.pums_large"
+          psql -U postgres -h $POSTGRES_HOST -d pums_pid -c "select count(*) FROM pums.pums"
+          psql -U postgres -h $POSTGRES_HOST -d pums_dup -c "select count(*) FROM pums.pums"
+          psql -U postgres -h $POSTGRES_HOST -d pums_null -c "select count(*) FROM pums"
+        env:
+          POSTGRES_HOST: localhost
+      - name: Check database connections test fixture
+        shell: bash -l {0}
+        run: |
+          source pass.sh
+          cd sql
+          mkdir ~/.smartnoise
+          cp tests/setup/postgres/connections-unit.yaml ~/.smartnoise
+          python tests/check_databases.py
+          ls -l ../datasets
+      - name: Test SDK
+        shell: bash -l {0}
+        run: |
+          source pass.sh
+          cd sql
+          export SKIP_PANDAS=1
+          export TEST_SQLITE=1
+          ls -l ../datasets
+          pytest tests
+

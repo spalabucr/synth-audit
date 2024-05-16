@@ -1,0 +1,22 @@
+sqlserver:
+  host: localhost
+  port: 1433
+  user: sa
+  datasets:
+    NameTests: 
+      dbname: nametests
+    PUMS: 
+      dbname: PUMS
+      table: PUMS.PUMS
+    PUMS_large: 
+      dbname: PUMS
+      table: PUMS.PUMS_large
+    PUMS_pid: 
+      dbname: PUMS_pid
+      table: PUMS.PUMS
+    PUMS_null: 
+      dbname: PUMS_null
+      table: PUMS.PUMS
+    PUMS_dup: 
+      dbname: PUMS_dup
+      table: PUMS.PUMS

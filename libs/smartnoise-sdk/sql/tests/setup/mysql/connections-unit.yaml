@@ -1,0 +1,20 @@
+mysql:
+  host: localhost
+  user: runner
+  port: 3306
+  datasets:
+    PUMS: 
+      dbname: PUMS
+      table: pums
+    PUMS_large: 
+      dbname: PUMS_large
+      table: pums_large
+    PUMS_pid: 
+      dbname: PUMS_pid
+      table: pums
+    PUMS_dup: 
+      dbname: PUMS_dup
+      table: pums
+    PUMS_null: 
+      dbname: PUMS_null
+      table: pums

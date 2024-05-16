@@ -1,0 +1,20 @@
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  datasets:
+    PUMS: 
+      dbname: pums
+      table: pums.pums
+    PUMS_large: 
+      dbname: pums
+      table: pums.pums_large
+    PUMS_pid: 
+      dbname: pums_pid
+      table: pums.pums
+    PUMS_dup: 
+      dbname: pums_dup
+      table: pums_dup.pums.pums
+    PUMS_null: 
+      dbname: pums_null
+      table: pums
