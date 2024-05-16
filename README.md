@@ -1,5 +1,5 @@
 # "What do you want from theory alone?" Experimenting with Tight Auditing of Differentially Private Synthetic Data Generation
-This repository contains the source code for the paper _"What do you want from theory alone?" Experimenting with Tight Auditing of Differentially Private Synthetic Data Generation_ by M.S.M.S. Annamalai, G. Ganev, E. De Cristofaro, to be presented August 2024 at USENIX Security 2024 [link]().
+This repository contains the source code for the paper _"What do you want from theory alone?" Experimenting with Tight Auditing of Differentially Private Synthetic Data Generation_ by M.S.M.S. Annamalai, G. Ganev, E. De Cristofaro, to appear at [USENIX Security 2024](https://www.usenix.org/conference/usenixsecurity24).
 
 ## Install
 Dependencies are managed by `conda`.  
