@@ -2,9 +2,15 @@
 This repository contains the source code for the paper _"What do you want from theory alone?" Experimenting with Tight Auditing of Differentially Private Synthetic Data Generation_ by M.S.M.S. Annamalai, G. Ganev, E. De Cristofaro, to appear at [USENIX Security 2024](https://www.usenix.org/conference/usenixsecurity24).
 
 ## Install
+### Manual
 Dependencies are managed by `conda`.  
 1. The required dependencies can be installed using the command `conda env create -f env.yml` and then run `conda activate synth-audit`.  
 2. Additionally, install the (modified) versions of the synthetic data generation libraries by running `libs/install.sh`.
+
+### Docker
+For simplicity, we have published a docker image at `msundarmsa/synth-audit:1.0` with the dependencies pre-installed.  
+1. Pull and run the image using the command `docker run -it msundarmsa/synth-audit:1.0 /bin/bash`.
+2. Then cd into the folder `cd ~/synth-audit/audit` and activate the environment using `conda activate synth-audit`.
 
 ## Run
 All commands are run from inside the `audit` folder.
